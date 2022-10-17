@@ -19,14 +19,55 @@ const { NotImplementedError } = require('../extensions/index.js');
  * reverseMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => '!NWAD TA KCATTA'
  * 
  */
+// if(key[i].match(/[a-z]/i)) {
+//   key = `${key}${key[i]}`
+// }
+
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(message = '', key = '') {
+    const aplhabet = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ']
+
+    if(message === '' || key === '') {
+      throw new Error("Incorrect arguments!");  
+    }
+
+    message = message.toUpperCase()
+    key = key.toUpperCase()
+
+    for (let i = 0; i < (message.length - key.length); i++) {
+      key = `${key}${key[i]}`
+    }
+
+    let kol = 0
+    let code = ''
+    for(let i = 0; i< message.length; i++) {
+      if(key[i].match(/[A-Z]/i)) {
+          code+=aplhabet[i-kol]
+
+      }
+      else {
+        kol++
+      }
+    }
+
+    return code
+
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  decrypt(message = '', key = '') {
+    const aplhabet = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ']
+
+    if(message === '' || key === '') {
+      throw new Error("Incorrect arguments!");  
+    }
+
+    message = message.toUpperCase()
+    key = key.toUpperCase()
+
+    for (let i = 0; i < (message.length - key.length); i++) {
+      key = `${key}${key[i]}`
+    }
+
+    return key
   }
 }
 
