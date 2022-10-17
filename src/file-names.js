@@ -20,7 +20,6 @@ function renameFiles(names) {
   for (let i = 0; i < names.length; i++) {
     let addedFile = names[i]
     let changeFile = addedFile
-    console.debug(addedFile)
     let counter = 1
     while(mas.includes(addedFile)) {
       addedFile = `${changeFile}(${counter})`
