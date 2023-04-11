@@ -24,50 +24,89 @@ const { NotImplementedError } = require('../extensions/index.js');
 // }
 
 class VigenereCipheringMachine {
+
+  constructor(isBool = true) {
+    this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    this.isBool = isBool
+  }
+
+  getModifiedKey(message, key) {
+    let modifiedKey = ''
+    let keyLength = key.length
+    let j = 0
+
+    for (let i = 0; i < message.length; i++) {
+      let modi = (i - j) % keyLength
+      if(this.alphabet.includes(message[i])) {
+        modifiedKey = `${modifiedKey}${key[modi]}`
+      }
+      else {
+        j++
+        modifiedKey = `${modifiedKey}${message[i]}`
+      }
+    }
+
+    return modifiedKey
+  }
+
   encrypt(message = '', key = '') {
-    const aplhabet = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ']
 
     if(message === '' || key === '') {
       throw new Error("Incorrect arguments!");  
     }
 
-    message = message.toUpperCase()
     key = key.toUpperCase()
+    message = message.toUpperCase()
 
-    for (let i = 0; i < (message.length - key.length); i++) {
-      key = `${key}${key[i]}`
+    let modifiedKey = this.getModifiedKey(message, key)
+
+    let shifr = ``
+
+    for (let i = 0; i < message.length; i++) {
+
+      let elementOfShifr = message[i]
+
+      if(this.alphabet.includes(message[i])) {
+        let messageLetter = this.alphabet.indexOf(message[i])
+        let keyLetter = this.alphabet.indexOf(modifiedKey[i])
+        
+        elementOfShifr = this.alphabet[(messageLetter + keyLetter) % this.alphabet.length]
+      }
+
+      shifr = `${shifr}${elementOfShifr}` 
     }
 
-    let kol = 0
-    let code = ''
-    for(let i = 0; i< message.length; i++) {
-      if(key[i].match(/[A-Z]/i)) {
-          code+=aplhabet[i-kol]
-
-      }
-      else {
-        kol++
-      }
-    }
-
-    return code
+    return this.isBool ? shifr : shifr.split('').reverse().join('')
 
   }
   decrypt(message = '', key = '') {
-    const aplhabet = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ']
 
     if(message === '' || key === '') {
       throw new Error("Incorrect arguments!");  
     }
 
-    message = message.toUpperCase()
     key = key.toUpperCase()
+    message = message.toUpperCase()
 
-    for (let i = 0; i < (message.length - key.length); i++) {
-      key = `${key}${key[i]}`
+    let modifiedKey = this.getModifiedKey(message, key)
+
+    let deshifr = ``
+
+    for (let i = 0; i < message.length; i++) {
+
+      let elementOfShifr = message[i]
+
+      if(this.alphabet.includes(message[i])) {
+        let messageLetter = this.alphabet.indexOf(message[i])
+        let keyLetter = this.alphabet.indexOf(modifiedKey[i])
+        
+        elementOfShifr = this.alphabet[((messageLetter - keyLetter < 0 ? messageLetter - keyLetter + 26 : messageLetter - keyLetter)) % this.alphabet.length]
+      }
+
+      deshifr = `${deshifr}${elementOfShifr}` 
     }
 
-    return key
+    return this.isBool ? deshifr : deshifr.split('').reverse().join('')
   }
 }
 

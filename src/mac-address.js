@@ -14,9 +14,20 @@ const { NotImplementedError } = require('../extensions/index.js');
  * For 00-1B-63-84-45-E6, the output should be true.
  *
  */
-function isMAC48Address(/* n */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function isMAC48Address(n) {
+  let macString = '0123456789ABCDEF'
+  let mac = n.split('-')
+
+  if(mac.length !== 6)
+    return false
+
+  if(mac.filter(el => el.length === 2).length === 0)
+    return false
+
+  if(mac.filter(el => !macString.includes(el[0]) || !macString.includes(el[1])).length !== 0)
+    return false
+
+  return true 
 }
 module.exports = {
   isMAC48Address
